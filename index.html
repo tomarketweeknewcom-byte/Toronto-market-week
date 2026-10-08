@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exhibit Application and Contract</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; color: #222; }
+    body { background-color: #f5f5f5; padding: 20px; }
+    
+    form {
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    .page {
+      background: #fff;
+      padding: 30px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+    .header-left { font-weight: bold; font-size: 20px; }
+    .header-center { font-weight: bold; font-size: 18px; text-align: center; }
+    .header-right { text-align: right; font-size: 13px; }
+    
+    /* SECTION CONTAINER LAYOUT */
+    .sec-container { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 15px; }
+    .sec-number { font-size: 16px; font-weight: bold; line-height: 1.2; }
+    .sec-body { flex: 1; }
+    
+    /* SECTION 1 STYLES */
+    .instruction-text { font-size: 11.5px; font-style: italic; color: #333; }
+    .disclaimer-text { font-size: 11px; font-style: italic; color: #333; margin: 6px 0 10px 0; }
+    .field-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 8px; font-size: 13px; }
+    .field-row label { white-space: nowrap; }
+    
+    .sec-body input[type="text"], .sec-body input[type="email"], .sec-body input[type="tel"] {
+      border: none;
+      border-bottom: 1px solid #000;
+      background-color: #f0f4f9;
+      padding: 3px 6px;
+      font-size: 13px;
+      outline: none;
+      flex: 1;
+    }
+    .w-full { width: 100%; }
+    .checkbox-section { margin: 14px 0; font-size: 12px; }
+    .checkbox-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+    .checkbox-row label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+    .checkbox-row input[type="checkbox"] { margin: 0; width: 14px; height: 14px; }
+    .divider-line { color: #888; font-weight: normal; }
+    .contacts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 15px; }
+    .contact-title { font-weight: bold; font-size: 13.5px; margin-bottom: 8px; }
+    .phone-field { display: flex; align-items: flex-end; flex: 1; }
+    .phone-field span { font-size: 13px; margin-right: 2px; }
+    .billing-section { margin-top: 18px; }
+    .billing-title { font-weight: bold; font-size: 13.5px; margin-bottom: 8px; }
+    .billing-title span { font-weight: normal; }
+
+    /* SECTION 2 STYLES */
+    .option-box {
+      display: flex;
+      border: 1px solid #a0a0a0;
+      margin-bottom: 18px;
+    }
+    .option-banner {
+      background-color: #e31b23;
+      color: white;
+      font-weight: bold;
+      font-size: 13px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      text-align: center;
+      padding: 10px 4px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .option-content { flex: 1; padding: 8px; font-size: 12px; }
+    .option-header { font-size: 12px; margin-bottom: 6px; line-height: 1.35; }
+    .option-header strong { font-size: 13px; }
+    .option-header em { font-size: 11.5px; }
+    .policy-text { font-weight: bold; font-style: italic; margin: 4px 0 8px 0; font-size: 11.5px; }
+
+    .opt-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .opt-table td { border: 1px solid #b0b0b0; padding: 3px 6px; vertical-align: middle; }
+    .opt-table input[type="number"], .opt-table input[type="text"] { border: none; background: transparent; font-size: 12px; outline: none; }
+    .opt-table input.active-input { border: 1px solid #555; background-color: #fff; padding: 1px 4px; }
+    .num-align { text-align: right; }
+    .currency-symbol { width: 15px; text-align: center; border-right: none !important; }
+    .currency-val { border-left: none !important; text-align: right; width: 100px; }
+    .deposit-text { font-size: 11.5px; padding-top: 6px; }
+    .summary-label { text-align: right; font-weight: bold; }
+
+    /* SECTION 3 STYLES */
+    .sec3-box { border: 1px solid #a0a0a0; padding: 10px 12px; font-size: 12.5px; }
+    .sec3-choices { display: flex; align-items: flex-end; gap: 15px; margin-bottom: 6px; }
+    .sec3-choices input { border: none; border-bottom: 1px solid #000; background-color: #f0f4f9; padding: 2px 5px; outline: none; width: 160px; }
+    .sec3-disclaimer { margin-bottom: 10px; }
+    .sec3-disclaimer strong { font-size: 12.5px; }
+    .sec3-disclaimer em { font-size: 12px; }
+    .sec3-lines input { width: 100%; border: none; border-bottom: 1px solid #000; background-color: #f0f4f9; height: 22px; margin-bottom: 6px; outline: none; }
+
+    /* SECTION 4 STYLES */
+    .sec4-box { border: 1px solid #a0a0a0; padding: 10px 12px; font-size: 12px; line-height: 1.4; }
+
+    /* FOOTERS */
+    .page1-footer { margin-top: 15px; font-size: 11.5px; line-height: 1.45; }
+    .page-num { text-align: right; font-size: 11px; font-weight: normal; margin-top: 15px; }
+
+    /* PAGE 2 STYLES */
+    .p2-fields { margin-bottom: 15px; }
+    .p2-row { display: flex; align-items: flex-end; margin-bottom: 8px; font-size: 13px; }
+    .p2-row label { font-weight: bold; min-width: 210px; }
+    .p2-row input { border: none; border-bottom: 1px solid #000; background-color: #f0f4f9; padding: 3px 6px; font-size: 13px; outline: none; flex: 1; }
+    
+    .p2-intro { font-weight: bold; font-size: 13px; margin: 15px 0 12px 0; }
+    
+    .p2-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; font-size: 11.5px; }
+    .p2-col-header { font-weight: bold; font-size: 12.5px; border-bottom: 1px solid #888; padding-bottom: 2px; margin-bottom: 6px; margin-top: 12px; }
+    .p2-col-header:first-child { margin-top: 0; }
+    .p2-check { display: flex; align-items: center; gap: 6px; margin-bottom: 3.5px; cursor: pointer; }
+    .p2-check input { margin: 0; width: 13px; height: 13px; }
+    
+    .p2-info-box { border: 1px solid #b0b0b0; padding: 8px; margin-top: 10px; font-size: 10.5px; line-height: 1.35; background-color: #fafafa; }
+    .p2-info-title { font-weight: bold; font-size: 11.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+
+    .p2-footer-note { font-style: italic; font-size: 10px; color: #444; margin-top: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+
+    /* PAGE 3 (TERMS & CONDITIONS 2-COLUMN LAYOUT) */
+    .terms-title-main { text-align: center; font-size: 22px; font-weight: normal; margin: 10px 0 20px 0; }
+    .terms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 10px; line-height: 1.3; text-align: left; }
+    .terms-section { margin-bottom: 10px; }
+    .terms-title { font-weight: bold; font-size: 11px; margin-bottom: 3px; text-transform: uppercase; }
+    .terms-section p { margin: 3px 0; }
+
+    /* SUBMIT BUTTON CONTAINER */
+    .submit-container { text-align: center; margin: 30px 0 20px 0; }
+    .submit-btn {
+      background-color: #e31b23;
+      color: #ffffff;
+      border: none;
+      padding: 12px 36px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+    .submit-btn:hover { background-color: #c11219; }
+    .submit-btn:disabled { background-color: #888; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+<form id="applicationForm">
+
+  <!-- PAGE 1: EXHIBIT APPLICATION -->
+  <div class="page">
+    <div class="header">
+      <div class="header-left">TORONTO market WEEK™</div>
+      <div class="header-center">EXHIBIT APPLICATION<br>AND CONTRACT</div>
+      <div class="header-right">
+        <strong>January 23 – 26, 2027</strong><br>
+        The International Centre<br>
+        6900 Airport Road, Mississauga, ON L4V 1E8
+      </div>
+    </div>
+
+    <!-- 1) COMPANY INFORMATION SECTION -->
+    <div class="sec-container">
+      <div class="sec-number">1)</div>
+      <div class="sec-body">
+        <div>
+          <strong>Company name, address, and telephone number as it should be published:</strong> 
+          <span class="instruction-text">All show information will be sent to the following address unless otherwise indicated. The information provided below will appear on the website and show guide unless otherwise indicated.</span>
+        </div>
+
+        <div class="field-row" style="margin-top: 10px;">
+          <label>Company Name:</label>
+          <input type="text" id="companyName" class="w-full" required>
+        </div>
+
+        <div class="disclaimer-text">
+          The undersigned (thereafter called the "exhibitor") hereby applies for exhibit space in Toronto Market Week
+        </div>
+
+        <div class="field-row">
+          <label>Address:</label>
+          <input type="text" id="address" class="w-full">
+        </div>
+
+        <div class="field-row">
+          <label>City:</label>
+          <input type="text" id="city" style="flex: 3;">
+          <label style="margin-left: 10px;">Prov:</label>
+          <input type="text" id="prov" style="flex: 1.5;">
+          <label style="margin-left: 10px;">Postal Code:</label>
+          <input type="text" id="postalCode" style="flex: 2;">
+        </div>
+
+        <div class="field-row">
+          <label>Tel:</label>
+          <div class="phone-field" style="flex: 2;">
+            <span>(</span>
+            <input type="tel" id="tel_area" style="width: 35px; flex: none; text-align: center;">
+            <span>)</span>
+            <input type="tel" id="tel_num">
+          </div>
+
+          <label style="margin-left: 10px;">Fax:</label>
+          <div class="phone-field" style="flex: 2;">
+            <span>(</span>
+            <input type="tel" id="fax_area" style="width: 35px; flex: none; text-align: center;">
+            <span>)</span>
+            <input type="tel" id="fax_num">
+          </div>
+
+          <label style="margin-left: 10px;">Website</label>
+          <input type="text" id="website" style="flex: 2.5;">
+        </div>
+
+        <div class="checkbox-section">
+          <div class="checkbox-row">
+            <label>
+              <input type="checkbox" id="chk_same_listing"> 
+              <strong>Use same show guide listing as previous show</strong>
+            </label>
+            <span class="divider-line">|</span>
+            <label>
+              <input type="checkbox" id="chk_pub_addr"> 
+              <strong>Publish mailing address in show guide listing</strong>
+            </label>
+          </div>
+
+          <div class="checkbox-row">
+            <label>
+              <input type="checkbox" id="chk_nopub_addr"> 
+              <strong>Do not publish mailing address in show guide listing</strong>
+            </label>
+            <span class="divider-line">|</span>
+            <label>
+              <strong>Publish Contact #1 email in show guide listing</strong>
+            </label>
+            <label style="margin-left: 5px;">
+              <input type="checkbox" id="chk_c1_email_yes"> Yes
+            </label>
+            <label>
+              <input type="checkbox" id="chk_c1_email_no"> No
+            </label>
+          </div>
+        </div>
+
+        <div class="contacts-grid">
+          <div>
+            <div class="contact-title">Contact #1:</div>
+            <div class="field-row">
+              <label>Name</label>
+              <input type="text" id="c1_name">
+            </div>
+            <div class="field-row">
+              <label>Title</label>
+              <input type="text" id="c1_title">
+            </div>
+            <div class="field-row">
+              <label>Cell:</label>
+              <div class="phone-field">
+                <span>(</span>
+                <input type="tel" id="c1_cell_area" style="width: 35px; flex: none; text-align: center;">
+                <span>)</span>
+                <input type="tel" id="c1_cell_num">
+              </div>
+            </div>
+            <div class="field-row">
+              <label>Email</label>
+              <input type="email" id="c1_email">
+            </div>
+          </div>
+
+          <div>
+            <div class="contact-title">Contact #2:</div>
+            <div class="field-row">
+              <label>Name</label>
+              <input type="text" id="c2_name">
+            </div>
+            <div class="field-row">
+              <label>Title</label>
+              <input type="text" id="c2_title">
+            </div>
+            <div class="field-row">
+              <label>Cell:</label>
+              <div class="phone-field">
+                <span>(</span>
+                <input type="tel" id="c2_cell_area" style="width: 35px; flex: none; text-align: center;">
+                <span>)</span>
+                <input type="tel" id="c2_cell_num">
+              </div>
+            </div>
+            <div class="field-row">
+              <label>Email</label>
+              <input type="email" id="c2_email">
+            </div>
+          </div>
+        </div>
+
+        <div class="billing-section">
+          <div class="billing-title">
+            Billing A/P Information <span>(if different from above):</span>
+          </div>
+          <div class="field-row">
+            <label>Accounts Payable Contact</label>
+            <input type="text" id="ap_contact" style="flex: 2;">
+            <label style="margin-left: 10px;">A/P Phone</label>
+            <div class="phone-field" style="flex: 1.5;">
+              <span>(</span>
+              <input type="tel" id="ap_phone_area" style="width: 35px; flex: none; text-align: center;">
+              <span>)</span>
+              <input type="tel" id="ap_phone_num">
+            </div>
+          </div>
+          <div class="field-row">
+            <label>A/P E-mail</label>
+            <input type="email" id="ap_email" class="w-full">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2) EXHIBIT SPACE SECTION -->
+    <div class="sec-container" style="margin-top: 25px;">
+      <div class="sec-number">2)</div>
+      <div class="sec-body">
+        
+        <!-- OPTION 1 -->
+        <div class="option-box">
+          <div class="option-banner">OPTION 1</div>
+          <div class="option-content">
+            <div class="option-header">
+              <strong>EXHIBIT SPACE WITH drape, carpet, and electrical</strong> 
+              <em>Cost includes drape to define booth space, carpet to fit booth space, electrical: one 1500 watt, 12 amp, 120 volt outlet with 2 plugs (200 sq ft and under includes 1 outlet, 300 - 500 sq ft includes 2 outlets, 600 sq ft and larger includes 3 outlets - installed at back of booth), wifi connection, and basic show guide listing.</em>
+            </div>
+            <div class="policy-text">
+              POLICY: There will be limited space for 5 ft depth booths. The cap for 5ft depth booths is 20 ft wide.
+            </div>
+
+            <table class="opt-table">
+              <tbody>
+                <tr>
+                  <td style="width: 40%;">50 - 499 sq ft at <strong>$22.50</strong>/sq ft</td>
+                  <td style="width: 35%;">
+                    Depth x Width 
+                    <input type="number" id="opt1_d1" value="10" style="width:35px; text-align:center;"> by 
+                    <input type="number" id="opt1_w1" value="30" style="width:35px; text-align:center;">
+                  </td>
+                  <td style="width: 7%;">Sq ft</td>
+                  <td style="width: 8%;" class="num-align">
+                    <input type="number" id="opt1_sqft1" value="300" style="width:100%; text-align:center;" readonly>
+                  </td>
+                  <td class="currency-symbol">$</td>
+                  <td class="currency-val"><span id="opt1_val1">6,750.00</span></td>
+                </tr>
+                <tr>
+                  <td>500+ sq ft at <strong>$22.00</strong>/sq ft</td>
+                  <td>
+                    Depth x Width 
+                    <input type="number" id="opt1_d2" style="width:35px; text-align:center;"> by 
+                    <input type="number" id="opt1_w2" style="width:35px; text-align:center;">
+                  </td>
+                  <td>Sq ft</td>
+                  <td class="num-align">
+                    <input type="number" id="opt1_sqft2" value="0" style="width:100%; text-align:center;" readonly>
+                  </td>
+                  <td class="currency-symbol">$</td>
+                  <td class="currency-val"><span id="opt1_val2">0.00</span></td>
+                </tr>
+                <tr>
+                  <td>Corner Premium for 100 - 599 sq ft at <strong>$200</strong>/corner</td>
+                  <td></td>
+                  <td>Qty</td>
+                  <td class="num-align">
+                    <input type="number" id="opt1_cornerQty" value="0" style="width:100%; text-align:center;">
+                  </td>
+                  <td class="currency-symbol">$</td>
+                  <td class="currency-val"><span id="opt1_cornerVal">0.00</span></td>
+                </tr>
+                <tr>
+                  <td colspan="4" rowspan="3" class="deposit-text" style="vertical-align: top;">
+                    30% deposit (plus HST) upon receipt of invoice. Balance due November 23, 2026.
+                  </td>
+                  <td class="currency-symbol summary-label">Subtotal</td>
+                  <td class="currency-symbol summary-label">$</td>
+                  <td class="currency-val summary-label"><span id="opt1_subtotal">6,750.00</span></td>
+                </tr>
+                <tr>
+                  <td class="currency-symbol summary-label">HST (13%)</td>
+                  <td class="currency-symbol summary-label">$</td>
+                  <td class="currency-val summary-label"><span id="opt1_hst">877.50</span></td>
+                </tr>
+                <tr style="background-color: #f0f4f9;">
+                  <td class="currency-symbol summary-label">Total</td>
+                  <td class="currency-symbol summary-label">$</td>
+                  <td class="currency-val summary-label"><span id="opt1_total">7,627.50</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- OPTION 2 -->
+        <div class="option-box">
+          <div class="option-banner">NEW | OPTION 2</div>
+          <div class="option-content">
+            <div class="option-header">
+              <strong>EXHIBIT SPACE WITHOUT carpet and electrical</strong> 
+              <em>Cost includes drape, wifi connection, and basic show guide listing.</em>
+            </div>
+            <div class="policy-text">
+              POLICY: There will be limited space for 5 ft depth booths. The cap for 5ft depth booths is 20 ft wide.
+            </div>
+
+            <table class="opt-table">
+              <tbody>
+                <tr>
+                  <td style="width: 40%;">50 - 499 sq ft at <strong>$20.50</strong>/sq ft</td>
+                  <td style="width: 35%;">
+                    Depth x Width 
+                    <input type="number" id="opt2_d1" style="width:35px; text-align:center;"> by 
+                    <input type="number" id="opt2_w1" style="width:35px; text-align:center;">
+                  </td>
+                  <td style="width: 7%;">Sq ft</td>
+                  <td style="width: 8%;" class="num-align">
+                    <input type="number" id="opt2_sqft1" value="300" class="active-input" style="width:100%; text-align:center;">
+                  </td>
+                  <td class="currency-symbol">$</td>
+                  <td class="currency-val"><span id="opt2_val1">6,150.00</span></td>
+                </tr>
+                <tr>
+                  <td>500+ sq ft at <strong>$20.00</strong>/sq ft</td>
+                  <td>
+                    Depth x Width 
+                    <input type="number" id="opt2_d2" style="width:35px; text-align:center;"> by 
+                    <input type="number" id="opt2_w2" style="width:35px; text-align:center;">
+                  </td>
+                  <td>Sq ft</td>
+                  <td class="num-align">
+                    <input type="number" id="opt2_sqft2" value="0" style="width:100%; text-align:center;" readonly>
+                  </td>
+                  <td class="currency-symbol">$</td>
+                  <td class="currency-val"><span id="opt2_val2">0.00</span></td>
+                </tr>
+                <tr>
+                  <td>Corner Premium for 100 - 599 sq ft at <strong>$200</strong>/corner</td>
+                  <td></td>
+                  <td>Qty</td>
+                  <td class="num-align">
+                    <input type="number" id="opt2_cornerQty" value="0" style="width:100%; text-align:center;">
+                  </td>
+                  <td class="currency-symbol">$</td>
+                  <td class="currency-val"><span id="opt2_cornerVal">0.00</span></td>
+                </tr>
+                <tr>
+                  <td colspan="4" rowspan="3" class="deposit-text" style="vertical-align: top;">
+                    30% deposit (plus HST) upon receipt of invoice. Balance due November 23, 2026.
+                  </td>
+                  <td class="currency-symbol summary-label">Subtotal</td>
+                  <td class="currency-symbol summary-label">$</td>
+                  <td class="currency-val summary-label"><span id="opt2_subtotal">6,150.00</span></td>
+                </tr>
+                <tr>
+                  <td class="currency-symbol summary-label">HST (13%)</td>
+                  <td class="currency-symbol summary-label">$</td>
+                  <td class="currency-val summary-label"><span id="opt2_hst">799.50</span></td>
+                </tr>
+                <tr style="background-color: #f0f4f9;">
+                  <td class="currency-symbol summary-label">Total</td>
+                  <td class="currency-symbol summary-label">$</td>
+                  <td class="currency-val summary-label"><span id="opt2_total">6,949.50</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3) LOCATION PREFERENCE SECTION -->
+    <div class="sec-container">
+      <div class="sec-number">3)</div>
+      <div class="sec-body">
+        <div class="sec3-box">
+          <div class="sec3-choices">
+            <strong>Location Preference:</strong> 
+            <span>1<sup>st</sup> Choice <input type="text" id="loc_pref_1"></span>
+            <span>2<sup>nd</sup> Choice <input type="text" id="loc_pref_2"></span>
+            <span>3<sup>rd</sup> Choice <input type="text" id="loc_pref_3"></span>
+          </div>
+          <div class="sec3-disclaimer">
+            <strong>We will do our best to accommodate all exhibitors. Location preferences are not guaranteed.</strong><br>
+            <em>Please detail any request(s) for positioning (neighbours, competitors etc.).</em>
+          </div>
+          <div class="sec3-lines">
+            <input type="text" id="loc_req_1">
+            <input type="text" id="loc_req_2">
+            <input type="text" id="loc_req_3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4) AGREEMENT SECTION -->
+    <div class="sec-container">
+      <div class="sec-number">4)</div>
+      <div class="sec-body">
+        <div class="sec4-box">
+          If exhibit request is accepted, we agree to pay for said exhibit space at the rate and schedule set forth as above. Payment accepted by E transfer. Deposit due upon receipt of invoice.We fully understand that this application and contract is a binding contract upon acceptance by Toronto Market Week. We have read, understood and accept the terms and conditions, rules and regulations set forth herein and agree to accept reassignment, if necessary, to create a more effective exposition.
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 1 FOOTER -->
+    <div class="page1-footer">
+      <strong>Please sign and initial where indicated and return all pages of this application by email or mail.</strong><br>
+      <strong>Please email application to:</strong> tomarketweeknewcom@gmail.com<br>
+      <span style="text-decoration: underline; font-weight: bold;">OR</span> <strong>mail application to:</strong> Toronto Market Week 5353 Dundas Street W., Suite 400, Toronto, ON M9B 6H8 &nbsp;&nbsp; Fax: (416) 614-8861
+    </div>
+    
+    <div class="page-num">Page 1 of 3</div>
+
+  </div>
+
+  <!-- PAGE 2: PRODUCT CATEGORIES -->
+  <div class="page">
+    <div class="header">
+      <div class="header-left">TORONTO market WEEK™</div>
+      <div class="header-right">
+        <strong>January 23 – 26, 2027</strong><br>
+        The International Centre<br>
+        6900 Airport Road, Mississauga, ON L4V 1E8
+      </div>
+    </div>
+
+    <div class="p2-fields">
+      <div class="p2-row">
+        <label>Company Name</label>
+        <input type="text" id="p2_companyName">
+      </div>
+      <div class="p2-row">
+        <label>Brands</label>
+        <input type="text" id="p2_brands">
+      </div>
+      <div class="p2-row">
+        <label>Product(s) Retail Price Range</label>
+        <input type="text" id="p2_priceRange">
+      </div>
+    </div>
+
+    <div class="p2-intro">
+      Please select the categories below associated with your product(s)/brand(s)
+    </div>
+
+    <div class="p2-grid" id="categoryContainer">
+      <!-- COLUMN 1 -->
+      <div>
+        <div class="p2-col-header">Apparel</div>
+        <label class="p2-check"><input type="checkbox" value="Men's Apparel"> Men's Apparel</label>
+        <label class="p2-check"><input type="checkbox" value="Women's Apparel"> Women's Apparel</label>
+        <label class="p2-check"><input type="checkbox" value="Intimates + Shapewear"> Intimates + Shapewear</label>
+        <label class="p2-check"><input type="checkbox" value="Unisex Apparel"> Unisex Apparel</label>
+        <label class="p2-check"><input type="checkbox" value="Sleepwear"> Sleepwear</label>
+        <label class="p2-check"><input type="checkbox" value="Underwear, Undergarments, Socks"> Underwear, Undergarments, Socks</label>
+
+        <div class="p2-col-header">Jewellery</div>
+        <label class="p2-check"><input type="checkbox" value="Necklaces"> Necklaces</label>
+        <label class="p2-check"><input type="checkbox" value="Earrings"> Earrings</label>
+        <label class="p2-check"><input type="checkbox" value="Rings"> Rings</label>
+        <label class="p2-check"><input type="checkbox" value="Bracelets"> Bracelets</label>
+        <label class="p2-check"><input type="checkbox" value="Gemstones"> Gemstones</label>
+        <label class="p2-check"><input type="checkbox" value="Fine Jewellery"> Fine Jewellery</label>
+        <label class="p2-check"><input type="checkbox" value="Stainless Steel"> Stainless Steel</label>
+        <label class="p2-check"><input type="checkbox" value="Sterling Silver"> Sterling Silver</label>
+
+        <div class="p2-col-header">Accessories</div>
+        <label class="p2-check"><input type="checkbox" value="Hair Accessories"> Hair Accessories</label>
+        <label class="p2-check"><input type="checkbox" value="Scarves"> Scarves</label>
+        <label class="p2-check"><input type="checkbox" value="Hats/Beanies/Bandanas"> Hats/Beanies/Bandanas</label>
+        <label class="p2-check"><input type="checkbox" value="Beach Accessories"> Beach Accessories</label>
+        <label class="p2-check"><input type="checkbox" value="Belts"> Belts</label>
+        <label class="p2-check"><input type="checkbox" value="Wallets"> Wallets</label>
+        <label class="p2-check"><input type="checkbox" value="Watches"> Watches</label>
+        <label class="p2-check"><input type="checkbox" value="Display Fixtures/Packaging"> Display Fixtures/Packaging</label>
+        <label class="p2-check"><input type="checkbox" value="Eyewear"> Eyewear</label>
+        <label class="p2-check"><input type="checkbox" value="Pet"> Pet</label>
+        <label class="p2-check"><input type="checkbox" value="Technology"> Technology</label>
+
+        <div class="p2-col-header">Label</div>
+        <label class="p2-check"><input type="checkbox" value="White Label"> White Label</label>
+        <label class="p2-check"><input type="checkbox" value="Private Label"> Private Label</label>
+
+        <div class="p2-col-header">Food</div>
+        <label class="p2-check"><input type="checkbox" value="Gourmet + Specialty Food"> Gourmet + Specialty Food</label>
+      </div>
+
+      <!-- COLUMN 2 -->
+      <div>
+        <div class="p2-col-header">Handbags + Luggage</div>
+        <label class="p2-check"><input type="checkbox" value="Handbags"> Handbags</label>
+        <label class="p2-check"><input type="checkbox" value="Luggage"> Luggage</label>
+
+        <div class="p2-col-header">Sustainability</div>
+        <label class="p2-check"><input type="checkbox" value="Eco-friendly/sustainable"> Eco-friendly/sustainable</label>
+        <label class="p2-check"><input type="checkbox" value="Fair Trade"> Fair Trade</label>
+
+        <div class="p2-col-header">Footwear</div>
+        <label class="p2-check"><input type="checkbox" value="Women's Footwear"> Women's Footwear</label>
+        <label class="p2-check"><input type="checkbox" value="Men's Footwear"> Men's Footwear</label>
+        <label class="p2-check"><input type="checkbox" value="Children's Footwear"> Children's Footwear</label>
+
+        <div class="p2-col-header">Baby + Child</div>
+        <label class="p2-check"><input type="checkbox" value="Baby + Child Accessories"> Baby + Child Accessories</label>
+        <label class="p2-check"><input type="checkbox" value="Baby + Child Bottoms"> Baby + Child Bottoms</label>
+        <label class="p2-check"><input type="checkbox" value="Baby + Child Tops"> Baby + Child Tops</label>
+
+        <div class="p2-col-header">Beauty + Wellness</div>
+        <label class="p2-check"><input type="checkbox" value="Makeup"> Makeup</label>
+        <label class="p2-check"><input type="checkbox" value="Fragrance"> Fragrance</label>
+        <label class="p2-check"><input type="checkbox" value="Hair Care"> Hair Care</label>
+        <label class="p2-check"><input type="checkbox" value="Skin Care"> Skin Care</label>
+        <label class="p2-check"><input type="checkbox" value="Bath + Body"> Bath + Body</label>
+        <label class="p2-check"><input type="checkbox" value="Natural Products"> Natural Products</label>
+
+        <div class="p2-col-header">Paper Goods + Stationery</div>
+        <label class="p2-check"><input type="checkbox" value="Calendars + Planners"> Calendars + Planners</label>
+        <label class="p2-check"><input type="checkbox" value="Paper Goods"> Paper Goods</label>
+        <label class="p2-check"><input type="checkbox" value="Books + Publications"> Books + Publications</label>
+        <label class="p2-check"><input type="checkbox" value="Stationery"> Stationery</label>
+        <label class="p2-check"><input type="checkbox" value="Greeting Cards"> Greeting Cards</label>
+
+        <div class="p2-col-header">Gift</div>
+        <label class="p2-check"><input type="checkbox" value="Seasonal/Holiday"> Seasonal/Holiday</label>
+        <label class="p2-check"><input type="checkbox" value="Toys/Games/Plush"> Toys/Games/Plush</label>
+        <label class="p2-check"><input type="checkbox" value="General Gift"> General Gift</label>
+        <label class="p2-check"><input type="checkbox" value="Novelty"> Novelty</label>
+      </div>
+
+      <!-- COLUMN 3 -->
+      <div>
+        <div class="p2-col-header">Home</div>
+        <label class="p2-check"><input type="checkbox" value="Tabletop + Kitchen"> Tabletop + Kitchen</label>
+        <label class="p2-check"><input type="checkbox" value="Housewares"> Housewares</label>
+        <label class="p2-check"><input type="checkbox" value="Barware"> Barware</label>
+        <label class="p2-check"><input type="checkbox" value="Home Décor"> Home Décor</label>
+        <label class="p2-check"><input type="checkbox" value="Furniture"> Furniture</label>
+        <label class="p2-check"><input type="checkbox" value="Lighting"> Lighting</label>
+        <label class="p2-check"><input type="checkbox" value="Garden + Outdoor"> Garden + Outdoor</label>
+        <label class="p2-check"><input type="checkbox" value="Linens & Textiles"> Linens & Textiles</label>
+        <label class="p2-check"><input type="checkbox" value="Rugs"> Rugs</label>
+        <label class="p2-check"><input type="checkbox" value="Throws/Blankets"> Throws/Blankets</label>
+        <label class="p2-check"><input type="checkbox" value="Candles + Home Fragrance"> Candles + Home Fragrance</label>
+
+        <div class="p2-info-box">
+          <div class="p2-info-title"><input type="checkbox" id="chk_made_in_canada" value="Made in Canada"> Made in Canada</div>
+          To claim "Made in Canada", your product(s) must adhere to the guidelines set out by the Competition Bureau of Canada. More information can be found on their website.
+        </div>
+
+        <div class="p2-info-box">
+          <div class="p2-info-title"><input type="checkbox" id="chk_designer_friendly" value="Designer Friendly"> Designer Friendly</div>
+          Designer Friendly programs are for Interior Designers and other design professionals, providing products such as home decor for their projects, clients, and business - without high MOQs.
+        </div>
+
+        <div class="p2-info-box">
+          <div class="p2-info-title"><input type="checkbox" id="chk_cash_and_carry" value="Cash and Carry"> Cash and Carry</div>
+          Toronto Market Week is a wholesale show that allows cash and carry if it is discreet, professional and upholds the elevated aesthetic of the show. Professional signs and displays are to be used and the cash and carry space is not to impede or distract from fellow exhibitors.<br><br>
+          How much of your booth will be dedicated to cash and carry? 
+          <input type="text" id="cash_and_carry_pct" style="width: 45px; border: none; border-bottom: 1px solid #000; background: #f0f4f9; text-align: center;"> %
+        </div>
+
+        <label class="p2-check" style="margin-top: 10px;"><input type="checkbox" id="chk_new_exhibitor" value="New Exhibitor"> <strong>New Exhibitor</strong></label>
+      </div>
+    </div>
+
+    <div class="p2-footer-note">
+      <div>
+        Please complete this page and return with page 1.<br>
+        <span style="font-size: 9px; color: #666;">*Canadian made category may be subject to Show Management approval</span>
+      </div>
+      <div style="font-size: 11px; font-weight: bold; color: #000;">Page 2 of 3</div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: TERMS & CONDITIONS -->
+  <div class="page">
+    <div class="header" style="border: none; margin-bottom: 0;">
+      <div class="header-left">TORONTO market WEEK™</div>
+      <div class="header-right">
+        <strong>January 23 – 26, 2027</strong><br>
+        The International Centre<br>
+        6900 Airport Road, Mississauga, ON L4V 1E8
+      </div>
+    </div>
+
+    <div class="terms-title-main">Terms and Conditions</div>
+
+    <div class="terms-grid">
+      <!-- Left Column -->
+      <div>
+        <div class="terms-section">
+          <div class="terms-title">1. EXHIBITOR COVENANTS</div>
+          <p>[Standard terms covering exhibitor compliance with venue and show management rules, labor laws, local health and safety regulations, and event guidelines.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">2. DISPLAY</div>
+          <p>[Terms outlining occupancy obligations, exhibit design boundaries, and management discretion to reject or modify non-conforming booth displays.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">3. ASSIGNMENT OR SUBLETTING</div>
+          <p>[Policy stating that space assignment, transfer, or subletting requires prior written approval from show management.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">4. INSURANCE</div>
+          <p>[Requirements for general liability insurance coverage throughout the move-in, event, and move-out periods, naming show management as additional insured.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">5. INDEMNITY</div>
+          <p>[Standard indemnity and hold-harmless clauses releasing show management and venue operators from liabilities, damages, or personal loss.]</p>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div>
+        <div class="terms-section">
+          <div class="terms-title">6. EXHIBITOR'S PROPERTY</div>
+          <p>[Clarification that all risk of loss or damage to booth property rests entirely with the exhibitor.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">7. BUILDING</div>
+          <p>[Exhibitor responsibilities concerning venue preservation, prohibited display items, and facility damage repair costs.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">8. PHOTOGRAPHY AND MEDIA</div>
+          <p>[Media consent clause permitting show management to record and use event audio, video, and imagery for future promotional purposes.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">9. CORRESPONDENCE</div>
+          <p>[Communication authorization for event updates, official contractor notices, and related trade show correspondence.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">10. CANCELLATION AND TERMINATION</div>
+          <p>[Formal policy specifying non-refundable deposit terms, written notice requirements, and financial liabilities upon contract cancellation.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">11. REMOVAL OF EXHIBITS</div>
+          <p>[Dismantling schedules, move-out deadlines, and removal procedures following event closure.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">12. CANCELLATION OR CURTAILMENT OF SHOW</div>
+          <p>[Force majeure clauses addressing event relocation, rescheduling, or cancellation due to unforeseen circumstances.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">13. PAYMENTS</div>
+          <p>[Administrative fees and bank processing rules applicable to returned or NSF payments.]</p>
+        </div>
+
+        <div class="terms-section">
+          <div class="terms-title">14. AGREEMENT</div>
+          <p>[Final acknowledgement confirming acceptance of all contractual terms upon application submission.]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-num" style="margin-top: 30px; font-weight: bold;">Page 3 of 3</div>
+  </div>
+
+  <!-- SUBMIT APPLICATION BUTTON -->
+  <div class="submit-container">
+    <button type="submit" id="submitBtn" class="submit-btn">Submit Application</button>
+  </div>
+
+</form>
+
+  <!-- FORM DYNAMIC CALCULATIONS -->
+  <script>
+    function formatCurrency(num) {
+      return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function calcOption(prefix, rateTier1, rateTier2) {
+      const d1 = parseFloat(document.getElementById(prefix + '_d1').value) || 0;
+      const w1 = parseFloat(document.getElementById(prefix + '_w1').value) || 0;
+      const d2 = parseFloat(document.getElementById(prefix + '_d2').value) || 0;
+      const w2 = parseFloat(document.getElementById(prefix + '_w2').value) || 0;
+      const cornerQty = parseInt(document.getElementById(prefix + '_cornerQty').value) || 0;
+
+      let sqft1 = d1 * w1;
+      let sqft2 = d2 * w2;
+
+      const sqft1Input = document.getElementById(prefix + '_sqft1');
+      if (d1 === 0 && w1 === 0) {
+        sqft1 = parseFloat(sqft1Input.value) || 0;
+      } else {
+        sqft1Input.value = sqft1;
+      }
+
+      document.getElementById(prefix + '_sqft2').value = sqft2;
+
+      const val1 = sqft1 * rateTier1;
+      const val2 = sqft2 * rateTier2;
+      const cornerVal = cornerQty * 200;
+
+      document.getElementById(prefix + '_val1').innerText = formatCurrency(val1);
+      document.getElementById(prefix + '_val2').innerText = formatCurrency(val2);
+      document.getElementById(prefix + '_cornerVal').innerText = formatCurrency(cornerVal);
+
+      const subtotal = val1 + val2 + cornerVal;
+      const hst = subtotal * 0.13;
+      const total = subtotal + hst;
+
+      document.getElementById(prefix + '_subtotal').innerText = formatCurrency(subtotal);
+      document.getElementById(prefix + '_hst').innerText = formatCurrency(hst);
+      document.getElementById(prefix + '_total').innerText = formatCurrency(total);
+    }
+
+    function updateAllCalculations() {
+      calcOption('opt1', 22.50, 22.00);
+      calcOption('opt2', 20.50, 20.00);
+    }
+
+    const allCalcInputs = document.querySelectorAll('.opt-table input');
+    allCalcInputs.forEach(input => {
+      input.addEventListener('input', updateAllCalculations);
+    });
+
+    updateAllCalculations();
+  </script>
+
+  <!-- FIREBASE BACKEND INTEGRATION MODULE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Replace with your Firebase Project config credentials
+    const firebaseConfig = {
+        apiKey: "AIzaSyC9ViCFIJrEqAoXaK0lb33JrMoXgXr06v4",
+        authDomain: "toronto-market.firebaseapp.com",
+        projectId: "toronto-market",
+       storageBucket: "toronto-market.firebasestorage.app",
+       messagingSenderId: "887966705817",
+       appId: "1:887966705817:web:6e38e5e05ac6b3ff7cf008",
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("applicationForm");
+    const submitBtn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Submitting...";
+
+      // Gather Checked Categories from Page 2
+      const selectedCategories = [];
+      const checkboxes = document.querySelectorAll('#categoryContainer input[type="checkbox"]:checked');
+      checkboxes.forEach(cb => {
+        if(cb.value) selectedCategories.push(cb.value);
+      });
+
+      // Assemble Form Submission Data Object
+      const formData = {
+        createdAt: serverTimestamp(),
+        companyInfo: {
+          companyName: document.getElementById("companyName").value,
+          address: document.getElementById("address").value,
+          city: document.getElementById("city").value,
+          prov: document.getElementById("prov").value,
+          postalCode: document.getElementById("postalCode").value,
+          phone: `(${document.getElementById("tel_area").value}) ${document.getElementById("tel_num").value}`,
+          fax: `(${document.getElementById("fax_area").value}) ${document.getElementById("fax_num").value}`,
+          website: document.getElementById("website").value,
+          options: {
+            useSameListing: document.getElementById("chk_same_listing").checked,
+            publishAddress: document.getElementById("chk_pub_addr").checked,
+            doNotPublishAddress: document.getElementById("chk_nopub_addr").checked,
+            publishC1EmailYes: document.getElementById("chk_c1_email_yes").checked,
+            publishC1EmailNo: document.getElementById("chk_c1_email_no").checked
+          }
+        },
+        contact1: {
+          name: document.getElementById("c1_name").value,
+          title: document.getElementById("c1_title").value,
+          cell: `(${document.getElementById("c1_cell_area").value}) ${document.getElementById("c1_cell_num").value}`,
+          email: document.getElementById("c1_email").value
+        },
+        contact2: {
+          name: document.getElementById("c2_name").value,
+          title: document.getElementById("c2_title").value,
+          cell: `(${document.getElementById("c2_cell_area").value}) ${document.getElementById("c2_cell_num").value}`,
+          email: document.getElementById("c2_email").value
+        },
+        billingInfo: {
+          contact: document.getElementById("ap_contact").value,
+          phone: `(${document.getElementById("ap_phone_area").value}) ${document.getElementById("ap_phone_num").value}`,
+          email: document.getElementById("ap_email").value
+        },
+        spaceOption1: {
+          sqft1: document.getElementById("opt1_sqft1").value,
+          sqft2: document.getElementById("opt1_sqft2").value,
+          corners: document.getElementById("opt1_cornerQty").value,
+          subtotal: document.getElementById("opt1_subtotal").innerText,
+          hst: document.getElementById("opt1_hst").innerText,
+          total: document.getElementById("opt1_total").innerText
+        },
+        spaceOption2: {
+          sqft1: document.getElementById("opt2_sqft1").value,
+          sqft2: document.getElementById("opt2_sqft2").value,
+          corners: document.getElementById("opt2_cornerQty").value,
+          subtotal: document.getElementById("opt2_subtotal").innerText,
+          hst: document.getElementById("opt2_hst").innerText,
+          total: document.getElementById("opt2_total").innerText
+        },
+        locationPreferences: {
+          choice1: document.getElementById("loc_pref_1").value,
+          choice2: document.getElementById("loc_pref_2").value,
+          choice3: document.getElementById("loc_pref_3").value,
+          details: [
+            document.getElementById("loc_req_1").value,
+            document.getElementById("loc_req_2").value,
+            document.getElementById("loc_req_3").value
+          ].filter(Boolean)
+        },
+        productCategories: {
+          companyNameP2: document.getElementById("p2_companyName").value,
+          brands: document.getElementById("p2_brands").value,
+          priceRange: document.getElementById("p2_priceRange").value,
+          selectedCategories: selectedCategories,
+          cashAndCarryPercentage: document.getElementById("cash_and_carry_pct").value
+        }
+      };
+
+      try {
+        const docRef = await addDoc(collection(db, "applications"), formData);
+        alert(`Application successfully submitted! Document ID: ${docRef.id}`);
+        form.reset();
+        updateAllCalculations();
+      } catch (error) {
+        console.error("Error saving document to Firebase:", error);
+        alert(`Submission failed: ${error.message}`);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Submit Application";
+      }
+    });
+  </script>
+</body>
+</html>
